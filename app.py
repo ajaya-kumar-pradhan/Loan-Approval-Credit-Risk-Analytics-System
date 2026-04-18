@@ -65,20 +65,23 @@ st.markdown("""
 # 1. LOAD ARTIFACTS
 # -------------------------------------------------------------
 @st.cache_resource
-def load_models():
+def load_models(_version=2):
+    """Load ML artifacts. Increment _version to bust the cache if models change."""
     base_dir = os.path.dirname(os.path.abspath(__file__))
     model_path = os.path.join(base_dir, "models", "model.joblib")
     scaler_path = os.path.join(base_dir, "models", "scaler.joblib")
     features_path = os.path.join(base_dir, "models", "features.json")
-    
-    if not (os.path.exists(model_path) and os.path.exists(scaler_path) and os.path.exists(features_path)):
+
+    missing = [p for p in [model_path, scaler_path, features_path] if not os.path.exists(p)]
+    if missing:
+        st.error(f"Missing model files: {[os.path.basename(p) for p in missing]}")
         return None, None, []
-        
+
     model = joblib.load(model_path)
     scaler = joblib.load(scaler_path)
     with open(features_path, "r") as f:
         feature_names = json.load(f)
-        
+
     return model, scaler, feature_names
 
 model, scaler, feature_names = load_models()
