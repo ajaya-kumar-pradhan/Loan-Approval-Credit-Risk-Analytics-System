@@ -1,0 +1,30 @@
+# Python modules
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Scikit-learn / Joblib
+# models/  <-- We actually want to keep small models, but usually not large ones.
+# In this case, model.joblib is small enough.
+
+# Data files
+data/*.csv
+data/*.zip
+
+# Node modules
+node_modules/
+frontend/node_modules/
+
+# Build outputs
+frontend/dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
