@@ -1,0 +1,84 @@
+/*
+=============================================================================
+LOAN DEFAULT PREDICTION — POWER BI DAX MEASURE LIBRARY
+=============================================================================
+Author      : Ajaya Kumar Pradhan
+Institution : JPMorgan Chase Style — Professional Data Model
+=============================================================================
+Instructions:
+1. Create a "Main Measures" table in Power BI.
+2. Paste these measures into the formula bar.
+=============================================================================
+*/
+
+-- ── KPI MEASURES ──────────────────────────────────────────────────────────
+
+"Total Applications" = COUNTROWS('fact_loan')
+
+"Good Loans" = CALCULATE(COUNTROWS('fact_loan'), 'fact_loan'[loan_condition] = "Good Loan")
+
+"Bad Loans" = CALCULATE(COUNTROWS('fact_loan'), 'fact_loan'[loan_condition] = "Bad Loan")
+
+"Approval Rate %" = DIVIDE([Good Loans], [Total Applications]) * 100
+
+"Default Rate %" = DIVIDE([Bad Loans], [Total Applications]) * 100
+
+"Total Portfolio £M" = DIVIDE(SUM('fact_loan'[loan_amount]), 1000000)
+
+"Avg Loan Amount" = AVERAGE('fact_loan'[loan_amount])
+
+"Avg Interest Rate" = AVERAGE('fact_loan'[interest_rate])
+
+"Avg DTI" = AVERAGE('fact_loan'[dti])
+
+
+-- ── RISK SEGMENTATION MEASURES ─────────────────────────────────────────────
+
+"Low Risk Loans" = CALCULATE(COUNTROWS('fact_loan'), 'fact_loan'[risk_category] = "Low Risk")
+
+"Medium Risk Loans" = CALCULATE(COUNTROWS('fact_loan'), 'fact_loan'[risk_category] = "Medium Risk")
+
+"High Risk Loans" = CALCULATE(COUNTROWS('fact_loan'), 'fact_loan'[risk_category] = "High Risk")
+
+"High Risk %" = DIVIDE([High Risk Loans], [Total Applications]) * 100
+
+"Expected Loss £M" = 
+    DIVIDE(
+        SUMX(
+            'fact_loan', 
+            'fact_loan'[loan_amount] * IF('fact_loan'[loan_condition] = "Bad Loan", 1, 0)
+        ), 
+        1000000
+    )
+
+
+-- ── AFFORDABILITY MEASURES ────────────────────────────────────────────────
+
+"Avg Annual Income" = AVERAGE('dim_customer'[annual_income])
+
+"Overextended Borrowers %" = 
+    DIVIDE(
+        CALCULATE(COUNTROWS('fact_loan'), 'fact_loan'[installment_pct_income] > 30),
+        [Total Applications]
+    ) * 100
+
+
+-- ── TIME INTELLIGENCE & RANKING ───────────────────────────────────────────
+
+"Default Rate YoY Change" = 
+    VAR CurrentYearRate = [Default Rate %]
+    VAR PrevYearRate = CALCULATE([Default Rate %], SAMEPERIODLASTYEAR('dim_date'[Date]))
+    RETURN CurrentYearRate - PrevYearRate
+
+"Region Default Rank" = 
+    RANKX(
+        ALL('dim_property'[region]), 
+        [Default Rate %], 
+        , 
+        DESC, 
+        DENSE
+    )
+
+"Net Portfolio Yield %" = 
+    [Avg Interest Rate] - ([Default Rate %] * 0.6) 
+    -- 0.6 = Assumed Recovery Rate / Loss Given Default adjustment

@@ -1,0 +1,38 @@
+{
+  "name": "JPMorgan Style - Credit Risk",
+  "dataColors": [
+    "#003087", 
+    "#B9975B", 
+    "#2ECC71", 
+    "#E74C3C", 
+    "#F39C12", 
+    "#9B59B6", 
+    "#7F8C8D"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#212121",
+  "tableAccent": "#003087",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "*": [
+          {
+            "fontSize": 10,
+            "fontFamily": "Segoe UI Semibold",
+            "color": { "solid": { "color": "#212121" } }
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": { "solid": { "color": "#F4F7F9" } },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}
