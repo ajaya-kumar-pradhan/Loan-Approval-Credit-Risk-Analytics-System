@@ -7,8 +7,8 @@ import os
 
 # Configure the Streamlit page
 st.set_page_config(
-    page_title="Credit Risk IQ",
-    page_icon="💼",
+    page_title="Loan Default Prediction",
+    page_icon="🏦",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -89,8 +89,8 @@ model, scaler, feature_names = load_models()
 # -------------------------------------------------------------
 # 2. UI HEADER
 # -------------------------------------------------------------
-st.title("Credit Risk IQ")
-st.markdown("<p style='color: #94a3b8; font-size: 1.2rem; margin-bottom: 2rem;'>Real-time Loan Default Prediction System</p>", unsafe_allow_html=True)
+st.title("Loan Default Prediction")
+st.markdown("<p style='color: #94a3b8; font-size: 1.2rem; margin-bottom: 2rem;'>AI-Powered Credit Risk Assessment System</p>", unsafe_allow_html=True)
 
 if model is None:
     st.error("Error: Could not load the machine learning models. Please ensure the models/ directory exists with model.joblib and scaler.joblib.")
