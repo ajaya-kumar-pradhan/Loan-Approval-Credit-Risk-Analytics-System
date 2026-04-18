@@ -1,3 +1,13 @@
+---
+title: Loan Default Predictor
+emoji: 😻
+colorFrom: red
+colorTo: gray
+sdk: streamlit
+app_file: app.py
+pinned: false
+---
+
 # 💳 Loan Approval & Credit Risk Analytics System
 
 <p align="center">
