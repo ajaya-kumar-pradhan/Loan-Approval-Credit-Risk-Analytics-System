@@ -11,8 +11,8 @@ pinned: false
 # 💳 Loan Approval & Credit Risk Analytics System
 
 <p align="center">
-  <a href="https://huggingface.co/spaces/ajayapradhanconnect/YOUR-APP-LINK" target="_blank">
-    <img src="https://img.shields.io/badge/🚀%20Live%20ML%20App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white"/>
+  <a href="https://huggingface.co/spaces/ajayapradhanconnect/loan-default-predictor" target="_blank">
+    <img src="https://img.shields.io/badge/🚀%20Live%20Demo-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white"/>
   </a>
   <a href="https://app.powerbi.com/view?r=YOUR-POWERBI-LINK" target="_blank">
     <img src="https://img.shields.io/badge/📊%20Power%20BI%20Dashboard-F2C811?style=for-the-badge&logo=powerbi&logoColor=black"/>
@@ -32,7 +32,7 @@ This project is a complete end-to-end system for **Loan Approval Prediction & Cr
 - **SQL Data Analysis:** Extracting and analyzing complex loan application data patterns.
 - **Power BI Dashboarding:** Visualizing key performance indicators related to credit risk.
 - **Machine Learning:** A robust Random Forest classifier for high-accuracy default predictions.
-- **Streamlit Application:** A monolithic, monolithic, beautifully stylized single-page application.
+- **Streamlit Application:** A beautifully stylized single-page application.
 - **Hugging Face Spaces:** Cloud deployments for the interactive portfolio.
 
 ---
