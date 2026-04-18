@@ -91,13 +91,18 @@ INSERT INTO dim_loan_grade (grade, grade_label, risk_level, min_interest_rate, m
 -- DIMENSION: dim_date
 -- ─────────────────────────────────────────────────────────────────────────────
 CREATE TABLE dim_date (
-    date_key            INT             PRIMARY KEY,   -- YYYYMM integer
-    issue_year          SMALLINT        NOT NULL,
-    issue_quarter       SMALLINT        NOT NULL,
-    issue_month         SMALLINT        NOT NULL,
+    date_key            INT             PRIMARY KEY,   -- YYYYMMDD integer
+    full_date           DATE            NOT NULL,
+    day_of_month        SMALLINT        NOT NULL,
+    month_number        SMALLINT        NOT NULL,
     month_name          VARCHAR(10)     NOT NULL,
-    is_financial_crisis TINYINT(1)      GENERATED ALWAYS AS (issue_year BETWEEN 2008 AND 2010) STORED
-) COMMENT = 'Date dimension seeded for loan issuance years 2007-2015.';
+    quarter             SMALLINT        NOT NULL,
+    year                SMALLINT        NOT NULL,
+    day_of_week         SMALLINT        NOT NULL,
+    day_name            VARCHAR(10)     NOT NULL,
+    is_weekend          TINYINT(1)      NOT NULL,
+    is_financial_crisis TINYINT(1)      GENERATED ALWAYS AS (year BETWEEN 2008 AND 2010) STORED
+) COMMENT = 'Complete daily Date dimension seeded for years 2007-2016.';
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
@@ -183,8 +188,9 @@ CREATE INDEX idx_fact_loan_risk     ON fact_loan (risk_category);
 CREATE OR REPLACE VIEW vw_loan_analytics AS
 SELECT
     f.loan_id,
-    d.issue_year,
-    d.issue_quarter,
+    d.full_date,
+    d.year                                                   AS issue_year,
+    d.quarter                                                AS issue_quarter,
     d.month_name,
     d.is_financial_crisis,
     g.grade,

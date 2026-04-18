@@ -1,25 +1,25 @@
 {
-  "name": "JPMorgan Style - Credit Risk",
+  "name": "Modern Fintech SaaS",
   "dataColors": [
-    "#003087", 
-    "#B9975B", 
-    "#2ECC71", 
-    "#E74C3C", 
-    "#F39C12", 
-    "#9B59B6", 
-    "#7F8C8D"
+    "#4338CA", 
+    "#0EA5E9", 
+    "#10B981", 
+    "#F43F5E", 
+    "#F59E0B", 
+    "#8B5CF6", 
+    "#14B8A6"
   ],
   "background": "#FFFFFF",
-  "foreground": "#212121",
-  "tableAccent": "#003087",
+  "foreground": "#1E293B",
+  "tableAccent": "#4338CA",
   "visualStyles": {
     "*": {
       "*": {
         "*": [
           {
-            "fontSize": 10,
-            "fontFamily": "Segoe UI Semibold",
-            "color": { "solid": { "color": "#212121" } }
+            "fontSize": 11,
+            "fontFamily": "Segoe UI",
+            "color": { "solid": { "color": "#334155" } }
           }
         ]
       }
@@ -28,7 +28,7 @@
       "*": {
         "background": [
           {
-            "color": { "solid": { "color": "#F4F7F9" } },
+            "color": { "solid": { "color": "#F8FAFC" } },
             "transparency": 0
           }
         ]

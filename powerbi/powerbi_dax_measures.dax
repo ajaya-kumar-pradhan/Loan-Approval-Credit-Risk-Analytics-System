@@ -1,17 +1,41 @@
 /*
 =============================================================================
-LOAN DEFAULT PREDICTION — POWER BI DAX MEASURE LIBRARY
+LOAN DEFAULT PREDICTION — COMPLETE DAX LIBRARY (MySQL SYNCED)
 =============================================================================
-Author      : Ajaya Kumar Pradhan
-Institution : JPMorgan Chase Style — Professional Data Model
-=============================================================================
-Instructions:
-1. Create a "Main Measures" table in Power BI.
-2. Paste these measures into the formula bar.
+Author  : Ajaya Kumar Pradhan
+Target  : loan_default_db (MySQL)
+Notes   : Includes Measures and Calculated Columns. Format properties in Power BI to Percentage ('%') instead of multiplying by 100.
 =============================================================================
 */
 
--- ── KPI MEASURES ──────────────────────────────────────────────────────────
+-- ── A. CALCULATED COLUMNS (Add these directly to tables) ───────────────────
+
+-- Add to 'dim_date'
+"Month Short" = FORMAT('dim_date'[full_date], "MMM")
+"Month Number" = MONTH('dim_date'[full_date])
+"Month Initial" = LEFT(FORMAT('dim_date'[full_date], "MMM"), 1)
+
+-- Add to 'dim_customer'
+"Income Band" = 
+    SWITCH(
+        TRUE(),
+        'dim_customer'[annual_income] < 30000, "Under 30K",
+        'dim_customer'[annual_income] < 60000, "30K-60K",
+        'dim_customer'[annual_income] < 100000, "60K-100K",
+        "Over 100K"
+    )
+
+"Income Band Sort" = 
+    SWITCH(
+        TRUE(),
+        'dim_customer'[annual_income] < 30000, 1,
+        'dim_customer'[annual_income] < 60000, 2,
+        'dim_customer'[annual_income] < 100000, 3,
+        4
+    )
+
+
+-- ── 1. CORE KPIs (Measures) ────────────────────────────────────────────────
 
 "Total Applications" = COUNTROWS('fact_loan')
 
@@ -19,9 +43,9 @@ Instructions:
 
 "Bad Loans" = CALCULATE(COUNTROWS('fact_loan'), 'fact_loan'[loan_condition] = "Bad Loan")
 
-"Approval Rate %" = DIVIDE([Good Loans], [Total Applications]) * 100
+"Approval Rate %" = DIVIDE([Good Loans], [Total Applications])
 
-"Default Rate %" = DIVIDE([Bad Loans], [Total Applications]) * 100
+"Default Rate %" = DIVIDE([Bad Loans], [Total Applications])
 
 "Total Portfolio £M" = DIVIDE(SUM('fact_loan'[loan_amount]), 1000000)
 
@@ -31,8 +55,17 @@ Instructions:
 
 "Avg DTI" = AVERAGE('fact_loan'[dti])
 
+"Est Interest Income £M" = 
+    DIVIDE(
+        SUMX(
+            'fact_loan', 
+            'fact_loan'[loan_amount] * 'fact_loan'[interest_rate] / 100
+        ), 
+        1000000
+    )
 
--- ── RISK SEGMENTATION MEASURES ─────────────────────────────────────────────
+
+-- ── 2. RISK ANALYSIS (Measures) ────────────────────────────────────────────
 
 "Low Risk Loans" = CALCULATE(COUNTROWS('fact_loan'), 'fact_loan'[risk_category] = "Low Risk")
 
@@ -40,19 +73,21 @@ Instructions:
 
 "High Risk Loans" = CALCULATE(COUNTROWS('fact_loan'), 'fact_loan'[risk_category] = "High Risk")
 
-"High Risk %" = DIVIDE([High Risk Loans], [Total Applications]) * 100
+"High Risk %" = DIVIDE([High Risk Loans], [Total Applications])
 
 "Expected Loss £M" = 
     DIVIDE(
         SUMX(
             'fact_loan', 
-            'fact_loan'[loan_amount] * IF('fact_loan'[loan_condition] = "Bad Loan", 1, 0)
+            'fact_loan'[loan_amount] * IF('fact_loan'[is_bad_loan] = 1, 1, 0)
         ), 
         1000000
     )
 
+"Risk-Adjusted Net Yield %" = [Avg Interest Rate] - ([Default Rate %] * 0.60)
 
--- ── AFFORDABILITY MEASURES ────────────────────────────────────────────────
+
+-- ── 3. AFFORDABILITY & CUSTOMER (Measures) ───────────────────────────────
 
 "Avg Annual Income" = AVERAGE('dim_customer'[annual_income])
 
@@ -60,15 +95,29 @@ Instructions:
     DIVIDE(
         CALCULATE(COUNTROWS('fact_loan'), 'fact_loan'[installment_pct_income] > 30),
         [Total Applications]
-    ) * 100
+    )
+
+"Homeowner %" = 
+    DIVIDE(
+        CALCULATE(COUNTROWS('dim_customer'), 'dim_customer'[home_ownership] IN {"MORTGAGE", "OWN"}),
+        [Total Applications]
+    )
 
 
--- ── TIME INTELLIGENCE & RANKING ───────────────────────────────────────────
+-- ── 4. TIME & TRENDING (Measures) ──────────────────────────────────────────
 
 "Default Rate YoY Change" = 
-    VAR CurrentYearRate = [Default Rate %]
-    VAR PrevYearRate = CALCULATE([Default Rate %], SAMEPERIODLASTYEAR('dim_date'[Date]))
-    RETURN CurrentYearRate - PrevYearRate
+    VAR CurrentRate = [Default Rate %]
+    VAR PrevRate    = CALCULATE([Default Rate %], SAMEPERIODLASTYEAR('dim_date'[full_date]))
+    RETURN IF(NOT ISBLANK(PrevRate), CurrentRate - PrevRate, BLANK())
+
+"Volume Growth YoY %" = 
+    VAR CurrentVol = [Total Applications]
+    VAR PrevVol    = CALCULATE([Total Applications], SAMEPERIODLASTYEAR('dim_date'[full_date]))
+    RETURN DIVIDE(CurrentVol - PrevVol, PrevVol)
+
+
+-- ── 5. REGIONAL RANKING (Measures) ─────────────────────────────────────────
 
 "Region Default Rank" = 
     RANKX(
@@ -78,7 +127,3 @@ Instructions:
         DESC, 
         DENSE
     )
-
-"Net Portfolio Yield %" = 
-    [Avg Interest Rate] - ([Default Rate %] * 0.6) 
-    -- 0.6 = Assumed Recovery Rate / Loss Given Default adjustment

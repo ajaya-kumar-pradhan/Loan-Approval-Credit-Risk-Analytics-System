@@ -100,13 +100,14 @@ def load_csv():
         else:                                  return "Medium Risk"
     df["risk_category"] = df.apply(risk_seg, axis=1)
 
-    # ── date_key (YYYYMM) ──
+    # ── date_key (YYYYMMDD mapped to 1st of the month) ──
     def parse_date_key(val):
         try:
-            dt = pd.to_datetime(val, format="%b-%Y")
-            return int(dt.strftime("%Y%m"))
+            # The CSV format is DD-MM-YYYY, e.g. 01-07-2013
+            dt = pd.to_datetime(val, format="%d-%m-%Y")
+            return int(dt.strftime("%Y%m01"))
         except:
-            return 200701
+            return 20070101
     df["date_key"] = df["issue_d"].apply(parse_date_key)
 
     # ── loan_id: ensure unique int ──
@@ -146,24 +147,39 @@ def load_csv():
 # STEP 2 — SEED dim_date (2007-2015)
 # ─────────────────────────────────────────────────────────────────────────────
 def seed_dim_date(conn):
-    print("\n[2/6] Seeding dim_date …")
+    print("\n[2/6] Seeding complete daily dim_date (2007-2016) …")
     cur = conn.cursor()
-    month_names = ["January","February","March","April","May","June",
-                   "July","August","September","October","November","December"]
+    
+    # Generate all daily dates from Jan 1, 2007 to Dec 31, 2016
+    start_date = pd.to_datetime("2007-01-01")
+    end_date = pd.to_datetime("2016-12-31")
+    date_range = pd.date_range(start_date, end_date)
+    
     rows = []
-    for y in range(2007, 2016):
-        for m in range(1, 13):
-            date_key = int(f"{y}{m:02d}")
-            quarter  = (m - 1) // 3 + 1
-            rows.append((date_key, y, quarter, m, month_names[m-1]))
+    for dt in date_range:
+        date_key     = int(dt.strftime("%Y%m%d"))
+        full_date    = dt.strftime("%Y-%m-%d")
+        day_of_month = dt.day
+        month_number = dt.month
+        month_name   = dt.strftime("%B")
+        quarter      = (dt.month - 1) // 3 + 1
+        year         = dt.year
+        day_of_week  = dt.dayofweek + 1    # Monday=1, Sunday=7
+        day_name     = dt.strftime("%A")
+        is_weekend   = 1 if dt.dayofweek >= 5 else 0
+        
+        rows.append((date_key, full_date, day_of_month, month_number, month_name,
+                     quarter, year, day_of_week, day_name, is_weekend))
 
     cur.executemany(
-        "INSERT IGNORE INTO dim_date (date_key, issue_year, issue_quarter, issue_month, month_name) "
-        "VALUES (%s, %s, %s, %s, %s)",
+        """INSERT IGNORE INTO dim_date 
+           (date_key, full_date, day_of_month, month_number, month_name, 
+            quarter, year, day_of_week, day_name, is_weekend) 
+           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
         rows
     )
     conn.commit()
-    log(f"Inserted {len(rows)} date rows")
+    log(f"Inserted {len(rows)} daily date rows")
     cur.close()
 
 
