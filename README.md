@@ -1,5 +1,7 @@
 # 💳 LoanGuard: Enterprise Credit Risk & Portfolio Analytics
 
+> **Turning raw loan data into boardroom-ready intelligence** — from SQL risk segmentation to ML-powered decisions and live executive dashboards.
+
 <p align="center">
   <a href="https://huggingface.co/spaces/ajayapradhanconnect/loan-default-predictor" target="_blank">
     <img src="https://img.shields.io/badge/🚀%20Live%20App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white"/>
@@ -14,117 +16,169 @@
 
 ---
 
-## 📌 Project Overview
+## 📌 Overview
 
-**LoanGuard** is a comprehensive, end-to-end Credit Risk Management system. It demonstrates a full-stack data science lifecycle—from **raw SQL business intelligence** and **advanced data modeling** to **machine learning deployment** and **interactive executive reporting**.
+**LoanGuard** is a production-style, end-to-end credit risk management system built to mirror how analytics teams operate inside real financial institutions.
 
-### 💼 The Business Problem
-Banks need to balance lending volume with risk exposure. This project solves that by identifying "at-risk" borrowers before approval and providing executives with real-time portfolio health monitoring.
+**The Business Problem:** Banks lose millions annually by approving loans to high-risk borrowers. At the same time, over-caution leaves revenue on the table. LoanGuard bridges that gap — combining data-driven risk scoring, regional exposure mapping, and executive-level portfolio monitoring into a single integrated platform.
+
+**Why It Matters:**
+- Lenders need to act on thousands of applications per month. Manual review doesn't scale.
+- Regulators require auditable, explainable risk decisions — not black-box models.
+- Executive teams need live portfolio health metrics, not static monthly reports.
+
+LoanGuard delivers all three.
 
 ---
 
-## 🏛️ System Architecture
+## 📊 Key Features
+
+- **Designed a star-schema data model** in MySQL, separating facts from dimensions for clean, scalable BI reporting
+- **Engineered 15+ SQL risk queries** targeting default rate concentration, DTI danger zones, and regional exposure rankings
+- **Built a 3-page Power BI executive dashboard** with 20+ DAX measures including Expected Loss, Risk-Adjusted Yield, and Borrower Affordability
+- **Trained a Random Forest classifier** (CreditSentry v2.1) on log-transformed income, DTI ratios, and employment seniority features
+- **Deployed a dual-pane Streamlit application** on Hugging Face — combining live loan evaluation with embedded portfolio analytics
+- **Implemented custom Power BI JSON theming** (Elite Obsidian) for a polished, fintech-grade visual identity
+- **Automated time intelligence** with a daily-grain date dimension supporting YoY Growth and rolling period comparisons
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Tools |
+|---|---|
+| **Data Storage** | MySQL |
+| **Data Analysis** | SQL (Window Functions, CTEs, Aggregations) |
+| **BI & Reporting** | Power BI Desktop, DAX, Power Query (M) |
+| **Machine Learning** | Python, Scikit-learn, Random Forest, Joblib |
+| **Feature Engineering** | Pandas, NumPy, log-transformations |
+| **App & Deployment** | Streamlit, Hugging Face Spaces |
+| **Version Control** | Git, GitHub |
+
+---
+
+## 📈 Key Metrics & Impact
+
+| Metric | Value |
+|---|---|
+| 📋 Loan Applications Analysed | **70,000+** |
+| 💷 Portfolio Value Modelled | **$300M+** |
+| 📐 DAX Measures Built | **20+** |
+| 🔍 SQL Risk Queries Engineered | **15+** |
+| 🌍 Regional Segments Profiled | **Ireland & Northern Ireland** |
+| ⚙️ ML Model Accuracy | **Random Forest v2.1 (production-ready)** |
+| 🚀 Deployment Platform | **Hugging Face Spaces (live)** |
+
+**Business outcomes modelled by this system:**
+- Identified a "High-Risk Danger Zone" segment (DTI > 30, Rate > 15%) with disproportionately elevated default rates — enabling targeted underwriting tightening
+- Ranked regions by default concentration, giving risk officers a geographic heat map for portfolio rebalancing
+- Replaced manual loan officer intuition with an explainable ML scoring engine, reducing evaluation time per application
+
+---
+
+## 🧠 Insights & Learnings
+
+**What the analysis revealed:**
+- **DTI is the strongest default predictor.** Borrowers with DTI above 30% combined with interest rates above 15% formed a statistically distinct danger zone — these are the accounts that disproportionately drive portfolio losses.
+- **Geography shapes risk exposure.** Default rates varied significantly by region, meaning a flat national underwriting policy leaves institutions either overexposed or unnecessarily conservative depending on the market.
+- **Income alone is misleading.** Log-transforming income and stress-testing debt serviceability (affordability ratios) revealed risk patterns that raw income figures concealed.
+- **Executive dashboards change decisions.** When KPIs like Expected Loss and Risk-Adjusted Yield are visible in real time, risk conversations shift from reactive to proactive.
+
+**What I learned building it:**
+- How to design a BI-ready star schema from an unstructured flat file — separating analytical concerns cleanly
+- Why time intelligence requires a dedicated daily-grain date dimension, not a simple date column
+- How to bridge the gap between a data scientist's ML output and a business user's decision workflow through thoughtful UX in Streamlit
+
+---
+
+## 📷 Dashboard Preview
+
+> 📸 *Screenshots below from the live Power BI dashboard and Streamlit application.*
+
+<!-- Replace the placeholders below with actual screenshots -->
+
+| Executive Portfolio Overview | Regional Risk Heatmap |
+|---|---|
+| ![Dashboard Page 1](assets/dashboard_overview.png) | ![Dashboard Page 2](assets/regional_risk.png) |
+
+| ML Loan Evaluation — Streamlit | Borrower Affordability View |
+|---|---|
+| ![Streamlit App](assets/streamlit_app.png) | ![Affordability](assets/affordability_view.png) |
+
+> 💡 **Tip for recruiters:** Click the **Power BI Dashboard** badge at the top to interact with the live report.
+
+---
+
+## 🚀 Live Demo
+
+| Platform | Link |
+|---|---|
+| 🔴 **Streamlit App** (Hugging Face) | [Launch App →](https://huggingface.co/spaces/ajayapradhanconnect/loan-default-predictor) |
+| 📊 **Power BI Dashboard** (Live) | [View Report →](https://app.powerbi.com/view?r=eyJrIjoiNGYzMTM1ZDItODQ3Mi00ZWVhLWE3MjQtOGYxYmZjOGRmZDYyIiwidCI6IjdlMzEwODQ1LTg0ZTEtNGRiOC1hZjk4LTcwNDA0MTkwZDhkZSJ9) |
+| 💻 **Source Code** (GitHub) | [Explore Repo →](https://github.com/ajaya-kumar-pradhan/Loan-Approval-Credit-Risk-Analytics-System) |
+
+---
+
+## 🗄️ System Architecture
 
 ```mermaid
 flowchart TD
-    A[Raw Loan Data] --> B[MySQL Database]
-    B --> C[SQL Business Analysis]
-    B --> D[Power BI Modeling]
-    D --> E[Daily-Grain Date Dimension]
-    B --> F[ML Pipeline]
-    F --> G[Random Forest v2.1 Classifier]
-    G --> H[Streamlit UI]
-    E --> I[Integrated Analytics Dashboard]
-    H --> J[Hugging Face Deployment]
+    A[Raw Loan Data — 70K+ Records] --> B[MySQL Database]
+    B --> C[SQL Business Intelligence<br/>Risk Segmentation · KPI Queries · Regional Analysis]
+    B --> D[Power BI Star Schema Model]
+    D --> E[Daily-Grain Date Dimension<br/>Time Intelligence · YoY Growth]
+    B --> F[ML Feature Engineering<br/>log-Income · DTI Ratios · Employment Seniority]
+    F --> G[Random Forest Classifier v2.1<br/>CreditSentry Engine]
+    E --> H[3-Page Executive Dashboard<br/>20+ DAX Measures · Obsidian Theme]
+    G --> I[Streamlit Dual-Pane App]
+    H --> I
+    I --> J[🚀 Hugging Face Deployment]
 ```
 
 ---
 
-## 🗄️ Phase 1: SQL Business Intelligence
-Before modeling, I performed deep-dive analysis on the raw dataset using MySQL to identify core risk drivers.
+## 📂 Project Structure
 
-### Key Analysis Queries
-
-#### 1. Executive KPI Dashboard
-*Purpose: At-a-glance health check of the total portfolio.*
-```sql
-SELECT
-    COUNT(*)                                                            AS Total_Apps,
-    ROUND(SUM(CASE WHEN is_bad_loan = 1 THEN 1.0 ELSE 0 END) / COUNT(*) * 100, 2) AS Default_Rate_Pct,
-    ROUND(SUM(loan_amount) / 1000000.0, 2)                              AS Total_Portfolio_M,
-    ROUND(AVG(interest_rate), 2)                                        AS Avg_Rate_Pct
-FROM fact_loan;
-```
-
-#### 2. Regional Risk Concentration
-*Purpose: Identifying geographic "hotspots" for potential defaults.*
-```sql
-SELECT
-    p.region,
-    COUNT(f.loan_id)                                                    AS Apps,
-    ROUND(SUM(CASE WHEN f.is_bad_loan = 1 THEN 1.0 ELSE 0 END) / COUNT(*) * 100, 2) AS Default_Rate_Pct,
-    RANK() OVER (ORDER BY SUM(CASE WHEN f.is_bad_loan = 1 THEN 1.0 ELSE 0 END) / COUNT(*) DESC) AS Risk_Rank
-FROM fact_loan f
-JOIN dim_property p ON f.property_key = p.property_key
-GROUP BY p.region
-ORDER BY Default_Rate_Pct DESC;
-```
-
-#### 3. The "Danger Zone" Segment
-*Purpose: Isolating high-DTI and high-rate clusters that drive losses.*
-```sql
-SELECT
-    CASE WHEN dti > 30 AND interest_rate > 15 THEN 'High Risk Danger Zone' ELSE 'Standard Segment' END AS Risk_Segment,
-    COUNT(*) AS Loan_Count,
-    ROUND(SUM(CASE WHEN is_bad_loan = 1 THEN 1.0 ELSE 0 END) / COUNT(*) * 100, 2) AS Default_Rate_Pct
-FROM fact_loan
-GROUP BY Risk_Segment;
-```
-
----
-
-## 📈 Phase 2: Power BI Analytics Hub
-I built a professional, three-page dashboard for the bank's executive team, fully integrated into the ML app.
-
-- **Data Modeling**: Upgraded to a daily-grain `dim_date` table to support standard **Time Intelligence (YoY Growth)**.
-- **Advanced DAX**: Implemented a library of 20+ measures including `Expected Loss £M`, `Risk-Adjusted Yield`, and `Borrower Affordability`.
-- **Elite Obsidian Theme**: Custom JSON-based theme for a sleek, modern fintech look.
-
----
-
-## 🧠 Phase 3: Intelligent Evaluation (ML)
-The **CreditSentry v2.1** engine provides real-time borrower assessment.
-
-- **Model**: Random Forest Classifier.
-- **Features**: log-transformed income, DTI ratios, employment seniority, and debt-to-income stress factors.
-- **Humanized UI**: Replaced clinical AI jargon with banking terminology like "Loan Evaluation" and "Profile Rank".
-
----
-
-## 🚀 Phase 4: Full-Stack Integration
-The project culminates in a **Dual-Pane Streamlit Application** hosted on Hugging Face.
-
-1. **📝 Loan Evaluation**: An interactive interface for officers to evaluate individual applications.
-2. **📈 Performance Insights**: An embedded live Power BI frame for broader portfolio monitoring.
-
----
-
-## 📁 Project Structure
 ```text
-├── app.py                # Main Streamlit Application (Custom Obsidian Theme)
-├── loanguard_ai_logo.png # High-resolution Branding
+LoanGuard/
+│
+├── app.py                          # Streamlit App — Dual-Pane Interface
+├── loanguard_ai_logo.png           # Brand Asset
+├── requirements.txt                # Deployment Dependencies
+│
 ├── sql/
-│   ├── business_analysis_queries.sql # Performance & Risk queries
-│   └── 01_star_schema_mysql.sql      # Database Architecture
+│   ├── 01_star_schema_mysql.sql    # Database Architecture & Schema Setup
+│   └── business_analysis_queries.sql  # 15+ Risk & Performance Queries
+│
 ├── powerbi/
-│   ├── creditrisk_theme.json          # Custom Visual Branding
-│   └── powerbi_dax_measures.dax       # Full Measure Library
-├── models/                           # ML Artifacts (Joblib)
-└── requirements.txt                  # Deployment Dependencies
+│   ├── creditrisk_theme.json       # Custom Obsidian Visual Theme
+│   └── powerbi_dax_measures.dax    # Full DAX Measure Library (20+ measures)
+│
+├── models/
+│   └── [Joblib ML Artifacts]       # Serialised Random Forest Model
+│
+└── assets/
+    └── [Dashboard Screenshots]     # Preview Images for README
 ```
 
 ---
 
-## 👨‍💻 Author
+## 👤 About Me
+
 **Ajaya Kumar Pradhan**
-*Data Analyst & Full-Stack Intelligence Developer*
+*Data Analyst | Power BI Developer | ML-Enabled Analytics*
+
+I build end-to-end analytics systems that connect raw data to business decisions — spanning SQL, Power BI, Python, and deployment. My work focuses on translating complex datasets into insights that executives can act on.
+
+**Core Skills:**
+`SQL` · `Power BI` · `DAX` · `Python` · `Machine Learning` · `Data Modelling` · `Streamlit` · `MySQL`
+
+**Portfolio domains:** Credit Risk · Retail Analytics · Supply Chain · Healthcare · Logistics
+
+📫 [Connect on LinkedIn](https://linkedin.com/in/ajaya-kumar-pradhan) · 🐙 [GitHub Portfolio](https://github.com/ajaya-kumar-pradhan)
+
+---
+
+<p align="center">
+  <i>Built to demonstrate production-grade analytics thinking — not just technical skills.</i>
+</p>
