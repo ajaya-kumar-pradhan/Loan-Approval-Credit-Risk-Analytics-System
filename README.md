@@ -103,7 +103,7 @@ LoanGuard delivers all three.
 
 | ML Loan Evaluation — Streamlit | Borrower Affordability View |
 |---|---|
-| ![Streamlit App](assets/streamlit_app.png) | ![Affordability](assets/affordability_view.png) |
+| ![Streamlit App](https://github.com/ajaya-kumar-pradhan/Loan-Approval-Credit-Risk-Analytics-System/blob/931ddb6606141f1a700f571ff5021947c103ec7d/CREDIT%20RISKK%20STRAMLIT.png) |
 
 > 💡 **Tip for recruiters:** Click the **Power BI Dashboard** badge at the top to interact with the live report.
 
