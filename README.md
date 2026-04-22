@@ -1,4 +1,4 @@
-# 💳 LoanGuard: Enterprise Credit Risk & Portfolio Analytics
+# 💳 Credit Risk & Portfolio Analytics
 
 > **Turning raw loan data into boardroom-ready intelligence** — from SQL risk segmentation to ML-powered decisions and live executive dashboards.
 
@@ -18,7 +18,7 @@
 
 ## 📌 Overview
 
-**LoanGuard** is a production-style, end-to-end credit risk management system built to mirror how analytics teams operate inside real financial institutions.
+*Credit Risk & Portfolio Analytics, end-to-end credit risk management system built to mirror how analytics teams operate inside real financial institutions.
 
 **The Business Problem:** Banks lose millions annually by approving loans to high-risk borrowers. At the same time, over-caution leaves revenue on the table. LoanGuard bridges that gap — combining data-driven risk scoring, regional exposure mapping, and executive-level portfolio monitoring into a single integrated platform.
 
