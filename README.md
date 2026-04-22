@@ -99,7 +99,7 @@ LoanGuard delivers all three.
 
 | Executive Portfolio Overview | Regional Risk Heatmap |
 |---|---|
-| ![Dashboard Page 1](https://github.com/ajaya-kumar-pradhan/Loan-Approval-Credit-Risk-Analytics-System/blob/19303adc4b0c501bc7be64bfb1fa89095b3d35f5/OVERVIEW.png) | ![Dashboard Page 2](assets/regional_risk.png) |
+| ![Dashboard Page 1](https://github.com/ajaya-kumar-pradhan/Loan-Approval-Credit-Risk-Analytics-System/blob/19303adc4b0c501bc7be64bfb1fa89095b3d35f5/OVERVIEW.png) | ![Dashboard Page 2](https://github.com/ajaya-kumar-pradhan/Loan-Approval-Credit-Risk-Analytics-System/blob/a5d1944cdd1a7af4f11ab60ed7664b9209c7130b/RISK.png) |
 
 | ML Loan Evaluation — Streamlit | Borrower Affordability View |
 |---|---|
